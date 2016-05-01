@@ -1,0 +1,11 @@
+/**
+  * PC/UVa 110102/101189
+  * 扫雷
+  * author：songyan
+  * date: 2016-04-30
+*/
+
+// inclue head file
+#include<iostream>
+
+using namespace std; // 标准空间
