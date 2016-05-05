@@ -40,6 +40,17 @@ using namespace std;
 // main function
 int main()
 {
+	/*
+	  处理思路很简单：先计算总共花费的钱数，然后
+	  求平均值，根据多退少补原则，多付出的拿钱，
+	  少付出的补钱，钱的交易额应该为补缴钱数的总
+	  额或者拿走的钱数总额，因为每个人存在一分钱
+	  的误差，所以这两个值不一定相同，故而取最大
+	  的那个值。
+	  需要注意的一点是：在计算多退少补时按照小数
+	  点第三位四舍五入的原则进行，那么就可以保证
+	  每个人的误差都在0.001元之内
+	 */
 	// 1.define n of the number of people
 	int n;
 	// 2.define data of the money of people spent
@@ -61,6 +72,7 @@ int main()
 		double diff = 0.0,diffNeg = 0.0,diffPos = 0.0;
 		for(int i = 0;i < n;i ++)
 		{
+			// compute the different money
 			diff = (int((data[i] - mean) * 100)) / 100.0;
 			if (diff > 0)
 			{
@@ -73,7 +85,7 @@ int main()
 		}// end for i
 		// 6.print result
 		double result = diffPos > diffNeg ? diffPos : diffNeg;
-//		cout << 2.3 << endl;
+		// setiosflags(ios::fixed) 表示固定浮点数位数，setprecision(2)设定精度
 		cout << '$' << setiosflags(ios::fixed) << setprecision(2) << result << endl;
 	}// end while n
 
