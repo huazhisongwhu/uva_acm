@@ -1,0 +1,165 @@
+/*
+  110104/706 LC-Display
+  Author: Huazhi Song
+  Date: 2016-05-10
+*/
+
+// include head file
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+// every number features' model
+string models[] = {"   "," - ","|  ","  |","| |"};
+/*
+ print per line number
+*/
+void printLine(int,int);
+/*
+  main function
+*/
+int main()
+{
+	/*
+	  1、把要打印的数字分成五部分，
+	     每打印一行，便需要考虑数字的特征，
+	  2、定义打印函数：第一个字符和最后一
+		 个字符总是固定打印，中间需要多次打印
+	  3、注意打印第2行，第四行时，打印的“|”
+	     需要多加注意
+	  4、另外要注意的是数字n有可能首位为零！
+	*/
+
+	// 1. define number s ,string n
+	int s = 0;
+	string n = "";
+	// 2. input s and n
+	int cnt = 0;
+	while (cin >> s >> n)
+	{
+		cnt++;
+		// jude exit condition
+		if (s == 0 && n.at(0) == '0')
+			break;// exit the program
+		
+		// 3. print per line
+
+		int len = n.length(); // s length
+		// print the first line
+		for (int i = 0; i < len; i++)
+		{
+			switch (n.at(i) - '0')
+			{
+			case 1:
+			case 4:
+				printLine(0,s);
+				break;
+			default :
+				printLine(1,s);
+			} // end switch 
+			if (i < len - 1)
+				cout << ' ';
+		} //  end for i per number first line
+		cout << endl;
+		// print the second line
+		for (int i = 0; i < s; i++)
+		{
+			for (int j = 0; j < len; j++)
+			{
+				switch (n.at(j) - '0')
+				{
+				case 1:
+				case 2:
+				case 3:
+				case 7:
+					printLine(3, s);
+					break;
+				case 5:
+				case 6:
+					printLine(2, s);
+					break;
+				default:
+					printLine(4,s);
+					break;
+				} // end switch
+				if (j < len - 1)
+					cout << ' ';
+			} // end for j per number
+			cout << endl;
+		} // end for i per copy
+		// print the third line
+		for (int i = 0; i < len; i++)
+		{
+			switch (n.at(i) - '0')
+			{
+			case 0:
+			case 1:
+			case 7:
+				printLine(0,s);
+				break;
+			default:
+				printLine(1,s);
+			} // end switch
+			if (i < len - 1)
+				cout << ' ';
+		} // end for i per number line
+		cout << endl;
+		//print fourth line
+		for (int i = 0; i < s; i++)
+		{
+			for (int j = 0; j < n.length(); j++)
+			{
+				switch (n.at(j) - '0')
+				{
+				case 1:
+				case 3:
+				case 4:
+				case 5:
+				case 7:
+				case 9:
+					printLine(3,s);
+					break;
+				case 2:
+					printLine(2,s);
+					break;
+				default:
+					printLine(4,s);
+					break;
+				} // end switch
+				if (j < len - 1)
+					cout << ' ';
+			} // end for j per number
+			cout << endl;
+		} // end for i per copy
+		// print fifth line
+		for (int i = 0; i < n.length(); i++)
+		{
+			switch (n.at(i) - '0')
+			{
+			case 1:
+			case 4:
+			case 7:
+				printLine(0, s);
+				break;
+			default:
+				printLine(1, s);
+				break;
+			} // end switch
+			if (i < len - 1)
+				cout << ' ';
+		} // end for 
+		cout << "\n" << endl;
+	} // end while
+	return 0;
+}
+// print number per line
+void printLine(int index, int s)
+{
+	cout << models[index].at(0); // print first char
+	for (int i = 0; i < s; i++) // print second char
+	{
+		cout << models[index].at(1);
+	}// end for i 
+	cout << models[index].at(2); // print third char
+}
