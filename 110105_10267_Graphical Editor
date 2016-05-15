@@ -1,0 +1,199 @@
+/*
+  110105/10267 Graphical Editor
+  Author: Huazhi Song
+  Date: 2016-05-13
+*/
+
+// include head file
+#include<iostream>
+#include<string>
+#include<string>
+using namespace std;
+
+
+// draw (x,y) to  char 
+void drawL(int, int, char, char[250][250]);
+// draw all point to 'O'
+void drawC(char,char[250][250],int,int);
+// draw vertical line
+void drawV(int, int, int, char, char[250][250]);
+// draw hi line
+void drawH(int, int, int, char, char[250][250]);
+// draw k
+void drawK(int, int, int, int, char, char[250][250]);
+// draw R region
+void drawF(int, int,char,char[250][250],int,int);
+// print the image
+void printImage(char[250][250], int, int);
+
+char color = ' ';
+/*
+  main function
+*/
+int main()
+{
+	/*
+		1.熟悉cin操作
+		2.直接操作打印即可
+		容易忽略的地方：
+		1）x1不一定比x2大，y1 不一定比 y2 大
+		2）无效命令行，要记得清除本行所有字母
+			，以免出现命令字母
+		3）填充区域R的字符时，递归特别容易出错，
+			要慎重选择递归结束的条件，避免陷入
+			死循环。
+	*/
+
+	// define char data 250X250
+	char data[250][250];
+	// define char ch accept command
+	char ch,c;
+	int m, n,x,y,x1,x2,y1,y2;// col row
+	string name;
+	while (cin >> ch)
+	{
+		// case C L V H K F S X 
+		// define the function perspectively
+		switch (ch)
+		{
+		case 'I': // new data
+			cin >> m >> n;
+			drawC('O',data, n, m);
+			//printImage(data, n, m);
+			break;
+		case 'C': // draw all point '0'
+			drawC('O',data,n,m);
+		//	printImage(data, n, m);
+			break;
+		case 'L': // draw (x,y) point
+			cin >> x >> y >> c;
+			drawL(y - 1, x - 1, c, data); 
+			//printImage(data, n, m);
+			break;
+		case 'V': // draw vertical line
+			cin >> x >> y1 >> y2 >> c;
+			if (y1 > y2)
+			{
+				swap(y1, y2);
+			}
+			drawV(y1 - 1, y2 - 1, x - 1, c, data);
+			//printImage(data, n, m);
+			break;
+		case 'H': // draw hi line
+			cin >> x1 >> x2 >> y >> c;
+			if (x1 > x2)
+			{
+				swap(x1, x2);
+			}
+			drawH(y - 1, x1 - 1, x2 - 1, c, data);
+			//printImage(data, n, m);
+			break;
+		case 'K':
+			cin >> x1 >> y1 >> x2 >> y2 >> c;
+			if (x1 > x2)
+				swap(x1, x2);
+			if (y1 > y2)
+				swap(y1,y2);
+			drawK(y1 - 1, x1 - 1, y2 - 1, x2 - 1, c, data);
+			//printImage(data, n, m);
+			break;
+		case 'F': // draw region R
+			cin >> x >> y >> c;
+			color = data[y - 1][x - 1];
+			drawF(y - 1,x - 1,c,data,n,m);
+			//printImage(data, n, m);
+			break;
+		case 'S':
+			cin >> name;
+			if (name.length() > 12)
+			{
+				name = name.substr(0, 12);
+			}
+			cout << name << endl;
+			printImage(data,n,m);
+			break;
+		case 'X':
+			exit(0); // terminate the program
+			break;
+		default:
+			char garbage[10000];
+			cin.get(garbage,10000);
+			break;
+		}
+	} // end while
+
+} // end main
+// implement the function
+void drawL(int x, int y, char c, char data[250][250])
+{
+	data[x][y] = c;
+} // drawL function
+  // draw all point to 'O'
+void drawC(char c,char data[250][250], int n, int m)
+{
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			data[i][j] = c;
+		} // end for j
+	} // end for i
+} // end drawC function
+// draw vertical line
+void drawV(int x1, int x2, int y, char c, char data[250][250])
+{
+	for (int i = x1; i <= x2; i++)
+	{
+		data[i][y] = c;
+	} // end for i
+} // end for drawV function
+// draw hi line
+void drawH(int x, int y1, int y2, char c, char data[250][250])
+{
+	for (int i = y1; i <= y2; i++)
+	{
+		data[x][i] = c;
+	} // end for i
+} // end drawH function
+// draw k
+void drawK(int x1, int y1, int x2, int y2, char c, char data[250][250])
+{
+	for (int i = x1; i <= x2; i++)
+	{
+		for (int j = y1; j <= y2; j++)
+		{
+			data[i][j] = c;
+		} // end for j
+	} // end for i
+} // end drawK function
+// draw R region
+void drawF(int x, int y,char c ,char data[250][250], int n, int m)
+{
+	if (color == c)
+		return;
+	data[x][y] = c;
+	if(x > 0)
+		if(data[x-1][y] == color)
+			drawF(x - 1, y, c, data, n, m);// upper
+	if(y > 0)
+		if(data[x][y - 1] == color)
+			drawF(x, y - 1, c, data, n, m);// left
+	if(y < m - 1)
+		if(data[x][y+1] == color)
+			drawF(x, y + 1, c, data, n, m);// right
+	if(x < n - 1)
+		if(data[x+1][y] == color)
+			drawF(x + 1, y , c, data, n, m); // bottom
+} // end drawF function
+// print the image
+void printImage(char data[250][250], int n, int m)
+{
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			cout << data[i][j];
+		} // end for j 
+		cout << endl;
+	} // end for i
+} // end print image function
